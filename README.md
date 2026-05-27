@@ -74,6 +74,7 @@ python -m research_radar.cli init --interests "reinforcement learning, LLM agent
 python -m research_radar.cli recommend --query "llm agent reinforcement learning" --top 5 --offline
 python -m research_radar.cli feedback <arxiv_id> save     # also: like / read / skip / dislike
 python -m research_radar.cli stats                        # shows the learned topic preferences
+python -m research_radar.cli reset                        # erase learned state (asks to confirm)
 ```
 
 `stats` prints the bandit's learned weight per topic — you can literally watch the agent's
@@ -151,8 +152,9 @@ not production hardening. (1) **Rate limiting** caps API calls. (2) **Input sani
 bounds/cleans queries before they hit an API. (3) **Grounding check** flags summaries that
 add numbers absent from the source abstract or run longer than it — a cheap hallucination
 tripwire; on a flag the agent falls back to a verbatim extractive summary. (4) **Confirmation**
-gates any outward/irreversible action behind a human y/n (the prototype intentionally has
-none). Provenance (arXiv id + link) is always shown so claims are checkable.
+gates any irreversible action behind a human y/n — e.g. `reset` (which erases learned
+preferences) refuses to proceed unless you approve interactively or pass `--yes`. Provenance
+(arXiv id + link) is always shown so claims are checkable.
 
 ## Tests
 

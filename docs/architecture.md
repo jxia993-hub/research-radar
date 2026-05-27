@@ -82,8 +82,10 @@ Persisting the policy is what makes the agent improve **across** sessions, not j
 ### Safety (`safety/guards.py`)
 `RateLimiter` (sliding window) caps external calls; `sanitize_query` bounds/cleans input;
 `grounding_check` flags ungrounded summaries (extra numbers / over-length) and triggers a
-verbatim-extractive fallback; `confirm_action` gates any outward/irreversible action behind a
-human y/n. Honest scope: prototype-level tripwires that show *where* safety hooks belong.
+verbatim-extractive fallback; `confirm_action` gates any irreversible action behind a human
+y/n — it is wired to the `reset` command, which refuses to delete learned state without
+explicit approval (`--yes` or an interactive *y*). Honest scope: prototype-level tripwires
+that show *where* safety hooks belong.
 
 ## 4. Evaluation design (`experiments/run_learning_curve.py`)
 

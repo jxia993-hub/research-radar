@@ -18,6 +18,7 @@ from typing import List
 
 from research_radar.agent import Recommendation, ResearchRadarAgent
 from research_radar.config import load_config
+from research_radar.safety.guards import confirm_action
 
 BAR = "─" * 78
 
@@ -155,6 +156,24 @@ def _cmd_demo(args) -> int:
     return 0
 
 
+def _cmd_reset(args) -> int:
+    """Erase learned preferences & history — an irreversible action, so it is gated by the
+    safety confirmation guard (demonstrating where human-in-the-loop approval belongs)."""
+    agent = _build_agent(args)
+    path = agent.memory.path
+    if not path.exists():
+        print(f"No memory at {path}; nothing to reset.")
+        return 0
+    if not confirm_action(f"This permanently deletes learned preferences & history at {path}.",
+                          require_confirmation=agent.safety.get("require_confirmation", True),
+                          auto_yes=args.yes):
+        print("Aborted — nothing was deleted.")
+        return 1
+    path.unlink()
+    print(f"Reset complete: deleted {path}.")
+    return 0
+
+
 def _liked_topics(interests: str, topics: List[str]) -> set:
     text = interests.lower()
     return {t for t in topics if any(w in text for w in t.split("_"))}
@@ -192,6 +211,10 @@ def build_parser() -> argparse.ArgumentParser:
     pd.add_argument("--interests", default=None)
     pd.add_argument("--top", type=int, default=4)
     pd.set_defaults(func=_cmd_demo, offline=None)
+
+    prs = sub.add_parser("reset", help="erase learned preferences & history (asks to confirm)")
+    prs.add_argument("--yes", action="store_true", help="skip the confirmation prompt")
+    prs.set_defaults(func=_cmd_reset)
     return p
 
 
