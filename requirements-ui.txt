@@ -1,0 +1,4 @@
+# Extra dependency for the optional Streamlit web UI (app.py).
+# The CLI + experiment only need requirements.txt.
+-r requirements.txt
+streamlit>=1.30

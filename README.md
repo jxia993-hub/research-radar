@@ -80,6 +80,21 @@ python -m research_radar.cli reset                        # erase learned state 
 `stats` prints the bandit's learned weight per topic — you can literally watch the agent's
 model of your taste take shape.
 
+## 🖥️ Web UI (Streamlit) — nicest for the demo video
+
+A point-and-click interface over the *same* agent: type a query, get paper cards, click
+👍 / 📖 / 👎, and watch the **learned-preference bar chart update live** as the contextual
+bandit adapts to you.
+
+```bash
+pip install -r requirements-ui.txt
+streamlit run app.py            # then open the printed URL (default http://localhost:8501)
+```
+
+Set interests/query in the sidebar, click **🔍 Recommend**, rate a few papers, and watch the
+right-hand "what the agent has learned" chart move. (`app.py` is a thin layer over
+`ResearchRadarAgent`; the CLI and UI share the same learned state via the memory store.)
+
 ## Use a real LLM (optional, nicer for the demo)
 
 ```bash
@@ -138,7 +153,8 @@ research_radar/
   safety/guards.py             # rate limiting, input sanitisation, grounding, confirmation
   agent.py                     # perceive → reason → decide → act → learn orchestrator
   simulator.py                 # hidden-preference user for evaluation
-  cli.py                       # init / recommend / feedback / stats / demo
+  cli.py                       # init / recommend / feedback / stats / demo / reset
+app.py                         # Streamlit web UI (optional; nicest for the demo video)
 experiments/run_learning_curve.py  # RL benchmark → results/learning_curve.png
 data/build_cache.py            # rebuild the offline cache from live arXiv
 tests/test_research_radar.py   # bandit-learns, encoder, memory, agent-loop tests
