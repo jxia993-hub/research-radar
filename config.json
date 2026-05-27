@@ -1,0 +1,51 @@
+{
+  "llm": {
+    "provider": "auto",
+    "anthropic_model": "claude-haiku-4-5-20251001",
+    "openai_model": "gpt-4o-mini",
+    "max_tokens": 400,
+    "temperature": 0.0,
+    "timeout": 30,
+    "max_calls_per_min": 30
+  },
+  "bandit": {
+    "algo": "linucb",
+    "alpha": 1.0,
+    "lam": 1.0,
+    "ts_v": 0.25
+  },
+  "perception": {
+    "default_query": "reinforcement learning language model agent",
+    "max_results": 12,
+    "arxiv_sleep": 3.0
+  },
+  "memory": {
+    "path": ".radar_state/memory.json"
+  },
+  "safety": {
+    "require_confirmation": true,
+    "max_query_len": 300,
+    "max_papers_per_cycle": 50
+  },
+  "reward_map": {
+    "save": 1.0,
+    "like": 0.8,
+    "read": 0.6,
+    "skip": 0.1,
+    "dislike": 0.0
+  },
+  "taxonomy": {
+    "reinforcement_learning": ["reinforcement learning", "policy gradient", "q-learning", "actor-critic", "ppo", "contextual bandit", "markov decision", "reward shaping", "exploration", "off-policy"],
+    "large_language_models": ["large language model", " llm", "transformer", "pretraining", "language model", "in-context learning", "scaling law", "foundation model", "next-token"],
+    "llm_agents": ["agent", "tool use", "tool-use", "planning", "react", "autonomous", "multi-agent", "function calling", "agentic", "orchestration"],
+    "rlhf_alignment": ["rlhf", "human feedback", "preference optimization", "alignment", "dpo", "reward model", "constitutional", "safety", "guardrail", "red-team"],
+    "multimodal_vlm": ["multimodal", "vision-language", "vlm", "visual", "video understanding", "image-text", "captioning", "cross-modal"],
+    "reasoning": ["reasoning", "chain-of-thought", "chain of thought", "step-by-step", "mathematical reasoning", "logical", "deduction", "self-consistency", "verifier"],
+    "efficiency": ["efficient", "quantization", "distillation", "pruning", "inference acceleration", "kv cache", "lora", "parameter-efficient", "sparse", "speedup", "low-rank"],
+    "theory": ["convergence", "generalization bound", "regret bound", "sample complexity", "provable", "optimization theory", "pac", "analysis"],
+    "robotics_control": ["robot", "manipulation", "locomotion", "control policy", "embodied", "sim-to-real", "dexterous", "navigation"],
+    "retrieval_rag": ["retrieval", "retrieval-augmented", " rag", "knowledge base", "vector database", "dense retrieval", "long-term memory"],
+    "generative_models": ["diffusion", "generative model", "text-to-image", "flow matching", "score-based", "image generation", "variational autoencoder"],
+    "evaluation_benchmarks": ["benchmark", "evaluation", "leaderboard", "new dataset", " metric", "assessment", "probing"]
+  }
+}

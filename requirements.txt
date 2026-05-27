@@ -1,0 +1,4 @@
+# Runtime dependencies. Everything else (argparse, json, urllib, xml) is stdlib.
+numpy>=1.24
+matplotlib>=3.6
+requests>=2.28

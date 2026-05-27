@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual envs
+venv/
+.venv/
+env/
+
+# Secrets — never commit API keys
+.env
+
+# Agent runtime memory (per-user state, not source)
+.radar_state/
+
+# OS
+.DS_Store
