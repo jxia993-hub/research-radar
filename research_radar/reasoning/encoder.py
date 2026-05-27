@@ -45,7 +45,7 @@ def _first_sentences(text: str, n: int = 2, limit: int = 240) -> str:
     """Extractive fallback summary — guaranteed grounded because it's copied verbatim."""
     sentences = re.split(r"(?<=[.!?])\s+", text.strip())
     out = " ".join(sentences[:n]).strip()
-    return (out[:limit] + "…") if len(out) > limit else out
+    return (out[:limit] + "...") if len(out) > limit else out
 
 
 class PaperEncoder:

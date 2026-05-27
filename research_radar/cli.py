@@ -20,7 +20,7 @@ from research_radar.agent import Recommendation, ResearchRadarAgent
 from research_radar.config import load_config
 from research_radar.safety.guards import confirm_action
 
-BAR = "─" * 78
+BAR = "=" * 78
 
 
 def _build_agent(args) -> ResearchRadarAgent:
@@ -42,7 +42,7 @@ def _print_rec(r: Recommendation) -> None:
     print(f"    summary: {r.features.summary}")
     print(f"    link   : {r.paper.abs_url or 'https://arxiv.org/abs/' + r.paper.arxiv_id}")
     if r.warnings:
-        print(f"    ⚠ safety: {'; '.join(r.warnings)}")
+        print(f"    [!] safety: {'; '.join(r.warnings)}")
     print()
 
 
@@ -60,7 +60,7 @@ def _cmd_recommend(args) -> int:
         agent.set_interests(args.interests)
     query = args.query or agent.cfg["perception"]["default_query"]
     print(BAR)
-    print(f"Research Radar · backend={agent.client.name} · policy={agent.bandit.name} · "
+    print(f"Research Radar | backend={agent.client.name} | policy={agent.bandit.name} | "
           f"interests={agent.interests or '(none set)'}")
     print(f"Query: {query!r}")
     print(BAR)
@@ -84,7 +84,7 @@ def _cmd_feedback(args) -> int:
         return 1
     print(f"Recorded '{args.action}' on {args.arxiv_id} (reward={reward:.2f}). Policy updated & saved.")
     s = agent.stats()
-    print(f"Interactions so far: {s['interactions']} · avg reward {s['avg_reward']:.3f}")
+    print(f"Interactions so far: {s['interactions']} | avg reward {s['avg_reward']:.3f}")
     return 0
 
 
@@ -93,20 +93,20 @@ def _print_weights(agent: ResearchRadarAgent, top: int = 8) -> None:
     if not weights:
         return
     scale = max((abs(w) for _, w in weights), default=1.0) or 1.0
-    print("Learned topic preferences (θ):")
+    print("Learned topic preferences (theta):")
     for topic, w in weights[:top]:
         bars = int(round(abs(w) / scale * 24))
         sign = "+" if w >= 0 else "-"
-        print(f"  {topic:<24} {sign}{abs(w):.3f} {'█' * bars}")
+        print(f"  {topic:<24} {sign}{abs(w):.3f} {'#' * bars}")
 
 
 def _cmd_stats(args) -> int:
     agent = _build_agent(args)
     s = agent.stats()
     print(BAR)
-    print(f"backend={s['llm_backend']} · policy={s['bandit']}")
-    print(f"interactions={s['interactions']} · avg_reward={s['avg_reward']:.3f} · "
-          f"seen={s['seen']} · bias={s['bias']:+.3f}")
+    print(f"backend={s['llm_backend']} | policy={s['bandit']}")
+    print(f"interactions={s['interactions']} | avg_reward={s['avg_reward']:.3f} | "
+          f"seen={s['seen']} | bias={s['bias']:+.3f}")
     print(f"by_action={s['by_action']}")
     print(BAR)
     _print_weights(agent)
@@ -123,8 +123,8 @@ def _cmd_demo(args) -> int:
     query = args.query or "reinforcement learning language model agent"
 
     print(BAR)
-    print("RESEARCH RADAR — scripted demo")
-    print(f"backend={agent.client.name} · policy={agent.bandit.name}")
+    print("RESEARCH RADAR - scripted demo")
+    print(f"backend={agent.client.name} | policy={agent.bandit.name}")
     print(f"interests={interests}")
     print(BAR)
 
@@ -139,7 +139,7 @@ def _cmd_demo(args) -> int:
     for r in recs:
         action = "save" if (set(r.top_topics()) & liked) else "skip"
         reward = agent.learn(r.paper.arxiv_id, action)
-        print(f"  {action:<5} {r.paper.arxiv_id}  (reward {reward:.1f})  {r.paper.title[:54]}…")
+        print(f"  {action:<5} {r.paper.arxiv_id}  (reward {reward:.1f})  {r.paper.title[:54]}...")
 
     print("\n[INTROSPECT] the agent has updated its preferences:\n")
     _print_weights(agent)
@@ -150,7 +150,7 @@ def _cmd_demo(args) -> int:
         for r in recs2:
             _print_rec(r)
     else:
-        print("  (offline cache exhausted — in live mode arXiv returns fresh papers here)")
+        print("  (offline cache exhausted - in live mode arXiv returns fresh papers here)")
     print(BAR)
     print("Demo complete. Run `python experiments/run_learning_curve.py` for the RL evaluation.")
     return 0
@@ -167,7 +167,7 @@ def _cmd_reset(args) -> int:
     if not confirm_action(f"This permanently deletes learned preferences & history at {path}.",
                           require_confirmation=agent.safety.get("require_confirmation", True),
                           auto_yes=args.yes):
-        print("Aborted — nothing was deleted.")
+        print("Aborted - nothing was deleted.")
         return 1
     path.unlink()
     print(f"Reset complete: deleted {path}.")

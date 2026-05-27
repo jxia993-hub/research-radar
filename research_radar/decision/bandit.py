@@ -86,7 +86,7 @@ class LinUCB(BanditPolicy):
     def __init__(self, d: int, alpha: float = 1.0, lam: float = 1.0) -> None:
         super().__init__(d, lam)
         self.alpha = float(alpha)
-        self.name = f"linucb(α={alpha:g})" if alpha > 0 else "greedy"
+        self.name = f"linucb(alpha={alpha:g})" if alpha > 0 else "greedy"
 
     def evaluate(self, X: np.ndarray) -> Evaluation:
         X = np.asarray(X, dtype=float)
@@ -123,7 +123,7 @@ class EpsilonGreedy(BanditPolicy):
         super().__init__(d, lam)
         self.epsilon = float(epsilon)
         self.rng = np.random.default_rng(seed)
-        self.name = f"ε-greedy(ε={epsilon:g})"
+        self.name = f"eps-greedy(eps={epsilon:g})"
 
     def evaluate(self, X: np.ndarray) -> Evaluation:
         X = np.asarray(X, dtype=float)

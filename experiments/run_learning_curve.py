@@ -32,7 +32,7 @@ from research_radar.decision.bandit import (  # noqa: E402
 from research_radar.simulator import make_synthetic_pool, run_episode, SimulatedUser  # noqa: E402
 
 # Plot order / colours kept stable so the figure reads the same every run.
-METHODS = ["random", "static-llm", "ε-greedy", "linucb", "lints"]
+METHODS = ["random", "static-llm", "eps-greedy", "linucb", "lints"]
 
 
 def _build(method: str, d: int, bcfg: dict, guess: np.ndarray, seed: int):
@@ -40,7 +40,7 @@ def _build(method: str, d: int, bcfg: dict, guess: np.ndarray, seed: int):
         return RandomPolicy(d, seed=seed)
     if method == "static-llm":
         return StaticLLMPolicy(guess)
-    if method == "ε-greedy":
+    if method == "eps-greedy":
         return EpsilonGreedy(d, epsilon=0.1, lam=bcfg["lam"], seed=seed)
     if method == "linucb":
         return LinUCB(d, alpha=bcfg["alpha"], lam=bcfg["lam"])
