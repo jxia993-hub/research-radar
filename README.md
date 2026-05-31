@@ -1,5 +1,10 @@
 # 🛰️ Research Radar — an LLM + RL agent that learns which papers you care about
 
+[![CI](https://github.com/jxia993/research-radar/actions/workflows/ci.yml/badge.svg)](https://github.com/jxia993/research-radar/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-unittest-informational.svg)](tests/)
+
 > **COMPSCI 767 — Assignment 2 (Build an intelligent software agent).**
 > Research Radar perceives a stream of new arXiv papers, **reasons** about each one with an
 > LLM, **decides** what to surface using a **reinforcement-learning** policy, and **learns**
@@ -64,17 +69,18 @@ deterministic mock encoder.
 
 ```bash
 git clone <your-repo-url> && cd research-radar
-pip install -r requirements.txt
+pip install -e .                 # installs the `research-radar` command (or: pip install -r requirements.txt)
 
 # Scripted end-to-end demo (perceive → reason → decide → act → learn, twice). Great for the video:
-python -m research_radar.cli demo
+research-radar demo              # equivalently: python -m research_radar.cli demo
 
-# Or drive it yourself:
-python -m research_radar.cli init --interests "reinforcement learning, LLM agents, RLHF"
-python -m research_radar.cli recommend --query "llm agent reinforcement learning" --top 5 --offline
-python -m research_radar.cli feedback <arxiv_id> save     # also: like / read / skip / dislike
-python -m research_radar.cli stats                        # shows the learned topic preferences
-python -m research_radar.cli reset                        # erase learned state (asks to confirm)
+# Or drive it yourself (all commands also work as `python -m research_radar.cli ...`):
+research-radar init --interests "reinforcement learning, LLM agents, RLHF"
+research-radar recommend --query "llm agent reinforcement learning" --top 5 --offline --why
+research-radar feedback <arxiv_id> save     # also: like / read / skip / dislike
+research-radar why <arxiv_id>               # LLM explains why a paper was recommended
+research-radar stats                        # shows the learned topic preferences
+research-radar reset                        # erase learned state (asks to confirm)
 ```
 
 `stats` prints the bandit's learned weight per topic — you can literally watch the agent's

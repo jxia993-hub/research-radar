@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "research-radar"
+version = "0.5.0"
+description = "An LLM-encoder + contextual-bandit (RL) agent that learns which arXiv papers you care about."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Jiajun Xia", email = "jxia993@aucklanduni.ac.nz" }]
+keywords = ["arxiv", "contextual-bandit", "reinforcement-learning", "llm", "recommender", "agent", "linucb"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.24",
+    "matplotlib>=3.6",
+    "requests>=2.28",
+]
+
+[project.optional-dependencies]
+ui = ["streamlit>=1.30"]
+dev = ["pytest>=7.0", "build>=1.0"]
+
+[project.urls]
+Homepage = "https://github.com/jxia993/research-radar"
+Repository = "https://github.com/jxia993/research-radar"
+Issues = "https://github.com/jxia993/research-radar/issues"
+
+[project.scripts]
+research-radar = "research_radar.cli:main"
+
+[tool.setuptools]
+packages = [
+    "research_radar",
+    "research_radar.perception",
+    "research_radar.reasoning",
+    "research_radar.decision",
+    "research_radar.memory",
+    "research_radar.safety",
+]
+
+[tool.setuptools.package-data]
+research_radar = ["../config.json", "../data/sample_papers.json"]
