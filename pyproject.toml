@@ -9,7 +9,7 @@ description = "An LLM-encoder + contextual-bandit (RL) agent that learns which a
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
-authors = [{ name = "Jiajun Xia", email = "jxia993@aucklanduni.ac.nz" }]
+authors = [{ name = "Jiajun Xiao", email = "jxia993@aucklanduni.ac.nz" }]
 keywords = ["arxiv", "contextual-bandit", "reinforcement-learning", "llm", "recommender", "agent", "linucb"]
 classifiers = [
     "Development Status :: 4 - Beta",

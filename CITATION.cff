@@ -4,7 +4,7 @@ message: "If you use this software, please cite it as below."
 type: software
 authors:
   - given-names: Jiajun
-    family-names: Xia
+    family-names: Xiao
     email: jxia993@aucklanduni.ac.nz
     affiliation: University of Auckland
 repository-code: "https://github.com/jxia993-hub/research-radar"
