@@ -9,4 +9,4 @@ The package is organised around a classic agent loop:
 `agent.ResearchRadarAgent` wires these together. See `docs/architecture.md`.
 """
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"

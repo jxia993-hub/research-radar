@@ -139,7 +139,7 @@ That gap is exactly what the RL component buys.
 | Capability (rubric)        | Where in the code |
 |----------------------------|-------------------|
 | Perceive input             | `research_radar/perception/arxiv_source.py` (live API + offline cache) |
-| **LLM reasoning**          | `research_radar/reasoning/encoder.py`, `llm_client.py` (LLM-as-state-encoder) |
+| **LLM reasoning**          | `reasoning/encoder.py` (LLM-as-state-encoder) + `reasoning/explainer.py` (LLM writes per-recommendation rationales) |
 | **RL decision-making**     | `research_radar/decision/bandit.py` (LinUCB, LinTS, ε-greedy, baselines) |
 | Learn / update from feedback | `agent.learn()` → `bandit.update()` (online) |
 | Tools / APIs               | arXiv Atom API, Anthropic/OpenAI HTTP APIs |

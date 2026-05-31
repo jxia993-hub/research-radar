@@ -39,6 +39,13 @@ them compose:
   and ranks by `score`. Feedback (save/read/skip/…) is mapped to a scalar reward and the
   model is updated online: `A ← A + xxᵀ`, `b ← b + r·x`, `θ = A⁻¹b`.
 
+* **LLM as a reasoner (the explainer).** Beyond encoding, the LLM performs a small
+  reasoning step at *action* time: given a recommended paper and the user's saved history,
+  it writes a one-to-two-sentence rationale ("recommended because it matches the RLHF papers
+  you saved…"), translating the bandit's numeric decision into a human explanation. This is
+  a second, heavier use of the LLM than feature extraction; it degrades to a grounded
+  template offline. See `reasoning/explainer.py`.
+
 This is a faithful instance of the **contextual-bandit** problem (Sutton & Barto, ch. 2;
 Li et al., 2010). It is genuine RL — sequential decisions under uncertainty with a reward
 signal and an explicit exploration/exploitation trade-off — while staying simple enough to
