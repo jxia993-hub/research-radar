@@ -14,7 +14,7 @@ It is a deliberately small but complete agent: it **perceives** input, **makes d
 **acts** toward a goal (*keep me on top of the literature that matters to me*), and **updates
 from feedback** — using an LLM, external APIs, persistent memory, and safety guards.
 
-📹 **2-minute demo video:** _<add your unlisted YouTube/Drive link here>_
+📹 **2-minute demo video:** [▶️ watch `demo.mp4`](demo.mp4) (bundled in this repo — click to play on GitHub)
 
 ---
 
