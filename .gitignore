@@ -18,3 +18,7 @@ env/
 
 # OS
 .DS_Store
+
+# Private: report draft (has name/UPI) + demo narration — kept local, not published
+docs/report_draft.md
+docs/demo_script.md
