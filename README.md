@@ -1,6 +1,6 @@
 # 🛰️ Research Radar — an LLM + RL agent that learns which papers you care about
 
-[![CI](https://github.com/jxia993/research-radar/actions/workflows/ci.yml/badge.svg)](https://github.com/jxia993/research-radar/actions/workflows/ci.yml)
+[![CI](https://github.com/jxia993-hub/research-radar/actions/workflows/ci.yml/badge.svg)](https://github.com/jxia993-hub/research-radar/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-unittest-informational.svg)](tests/)

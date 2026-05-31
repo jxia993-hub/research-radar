@@ -7,7 +7,7 @@ authors:
     family-names: Xia
     email: jxia993@aucklanduni.ac.nz
     affiliation: University of Auckland
-repository-code: "https://github.com/jxia993/research-radar"
+repository-code: "https://github.com/jxia993-hub/research-radar"
 abstract: >-
   Research Radar is a small intelligent software agent that triages arXiv papers.
   A large language model encodes each paper's abstract into a structured topic

@@ -6,7 +6,7 @@ kept small and readable on purpose. Contributions that preserve that spirit are 
 ## Development setup
 
 ```bash
-git clone https://github.com/jxia993/research-radar
+git clone https://github.com/jxia993-hub/research-radar
 cd research-radar
 pip install -e ".[dev,ui]"      # editable install + test/build + Streamlit
 ```

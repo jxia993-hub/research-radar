@@ -29,9 +29,9 @@ ui = ["streamlit>=1.30"]
 dev = ["pytest>=7.0", "build>=1.0"]
 
 [project.urls]
-Homepage = "https://github.com/jxia993/research-radar"
-Repository = "https://github.com/jxia993/research-radar"
-Issues = "https://github.com/jxia993/research-radar/issues"
+Homepage = "https://github.com/jxia993-hub/research-radar"
+Repository = "https://github.com/jxia993-hub/research-radar"
+Issues = "https://github.com/jxia993-hub/research-radar/issues"
 
 [project.scripts]
 research-radar = "research_radar.cli:main"
