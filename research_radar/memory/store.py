@@ -104,6 +104,22 @@ class MemoryStore:
     def clear_pending(self, arxiv_id: str) -> None:
         self.data.get("pending", {}).pop(arxiv_id, None)
 
+    # ------------------------------------------------------------------ history queries
+    def liked_papers(self, limit: int = 8) -> List[Dict[str, Any]]:
+        """Most recent papers the user reacted positively to (save/like/read), newest first.
+        Used by the explainer to ground a recommendation in the user's actual taste."""
+        positive = {"save", "like", "read"}
+        liked = [h for h in self.data.get("history", []) if h.get("action") in positive]
+        return list(reversed(liked))[:limit]
+
+    def top_liked_topics(self, limit: int = 5) -> List[str]:
+        """Topics that appear most often across the user's positively-rated papers."""
+        counts: Dict[str, int] = {}
+        for h in self.liked_papers(limit=50):
+            for t in h.get("top_topics", []):
+                counts[t] = counts.get(t, 0) + 1
+        return [t for t, _ in sorted(counts.items(), key=lambda kv: kv[1], reverse=True)[:limit]]
+
     # ------------------------------------------------------------------ stats
     def stats(self) -> Dict[str, Any]:
         hist = self.data.get("history", [])

@@ -70,8 +70,21 @@ def _cmd_recommend(args) -> int:
         return 0
     for r in recs:
         _print_rec(r)
+        if getattr(args, "why", False):
+            print(f"    why    : {agent.explain(r)}\n")
     print("Give feedback, e.g.:  python -m research_radar.cli feedback "
           f"{recs[0].paper.arxiv_id} save")
+    return 0
+
+
+def _cmd_why(args) -> int:
+    agent = _build_agent(args)
+    try:
+        reason = agent.explain_by_id(args.arxiv_id)
+    except KeyError as exc:
+        print(f"error: {exc}")
+        return 1
+    print(f"Why {args.arxiv_id} was recommended:\n  {reason}")
     return 0
 
 
@@ -149,6 +162,9 @@ def _cmd_demo(args) -> int:
     if recs2:
         for r in recs2:
             _print_rec(r)
+        top = recs2[0]
+        print("[EXPLAIN] the LLM reasons about the top pick using your save history:\n")
+        print(f"  Why {top.paper.arxiv_id}? {agent.explain(top)}\n")
     else:
         print("  (offline cache exhausted - in live mode arXiv returns fresh papers here)")
     print(BAR)
@@ -196,6 +212,7 @@ def build_parser() -> argparse.ArgumentParser:
     pr.add_argument("--query", default=None)
     pr.add_argument("--interests", default=None, help="optionally (re)set interests")
     pr.add_argument("--top", type=int, default=5)
+    pr.add_argument("--why", action="store_true", help="add an LLM-written rationale per paper")
     pr.set_defaults(func=_cmd_recommend)
 
     pf = sub.add_parser("feedback", help="record feedback on a paper")
@@ -205,6 +222,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     ps = sub.add_parser("stats", help="show learned preferences + history")
     ps.set_defaults(func=_cmd_stats)
+
+    pw = sub.add_parser("why", help="explain why a recommended paper was surfaced")
+    pw.add_argument("arxiv_id")
+    pw.set_defaults(func=_cmd_why)
 
     pd = sub.add_parser("demo", help="scripted end-to-end demonstration")
     pd.add_argument("--query", default=None)

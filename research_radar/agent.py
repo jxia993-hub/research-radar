@@ -21,6 +21,7 @@ from research_radar.decision.bandit import BanditPolicy
 from research_radar.memory.store import MemoryStore
 from research_radar.perception.arxiv_source import Paper, fetch_papers
 from research_radar.reasoning.encoder import PaperEncoder, PaperFeatures, _first_sentences
+from research_radar.reasoning.explainer import RecommendationExplainer
 from research_radar.reasoning.llm_client import build_llm_client
 from research_radar.safety.guards import grounding_check, sanitize_query
 
@@ -48,6 +49,7 @@ class ResearchRadarAgent:
         self.d = len(self.topics) + 1  # +1 for bias term
         self.client = build_llm_client(cfg)
         self.encoder = PaperEncoder(self.client, cfg)
+        self.explainer = RecommendationExplainer(self.client, cfg)
         self.memory = MemoryStore(cfg["memory"]["path"], self.topics)
         self.algo = cfg["bandit"]["algo"]
         self.bandit: BanditPolicy = self.memory.get_or_init_bandit(self.algo, self.d, cfg["bandit"], seed)
@@ -115,6 +117,7 @@ class ResearchRadarAgent:
         pending = {
             r.paper.arxiv_id: {
                 "title": r.paper.title,
+                "abstract": r.paper.abstract,
                 "vector": r.features.vector(self.topics).tolist(),
                 "summary": r.features.summary,
                 "source": r.features.source,
@@ -145,6 +148,35 @@ class ResearchRadarAgent:
         self.memory.clear_pending(arxiv_id)
         self.memory.save()
         return reward
+
+    # ----------------------------------------------------------------- explain
+    def explain(self, rec: "Recommendation") -> str:
+        """Generate a personalised, LLM-written rationale for one recommendation.
+
+        Uses the LLM as a reasoner (not just an encoder): it connects the candidate to the
+        user's saved history. Falls back to a grounded template offline."""
+        return self.explainer.explain(
+            title=rec.paper.title,
+            abstract=rec.paper.abstract,
+            matched_topics=rec.top_topics(),
+            liked=self.memory.liked_papers(limit=8),
+            interests=self.interests,
+            exploit=rec.exploit,
+            explore=rec.explore,
+        )
+
+    def explain_by_id(self, arxiv_id: str) -> str:
+        """Explain a pending recommendation by id (used by the CLI across invocations)."""
+        pending = self.memory.get_pending(arxiv_id)
+        if pending is None:
+            raise KeyError(f"no pending recommendation for {arxiv_id!r}; run a recommendation first")
+        return self.explainer.explain(
+            title=pending.get("title", ""),
+            abstract=pending.get("abstract", "") or pending.get("summary", ""),
+            matched_topics=pending.get("top_topics", []),
+            liked=self.memory.liked_papers(limit=8),
+            interests=self.interests,
+        )
 
     # ----------------------------------------------------------------- introspection
     def topic_weights(self) -> List[tuple[str, float]]:

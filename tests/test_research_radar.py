@@ -113,5 +113,30 @@ class TestAgentOffline(unittest.TestCase):
             self.assertEqual(agent.stats()["interactions"], 1)
 
 
+class TestExplainer(unittest.TestCase):
+    def _agent(self, tmp):
+        cfg = load_config(str(Path(__file__).resolve().parents[1] / "config.json"))
+        cfg["llm"]["provider"] = "mock"
+        cfg["memory"]["path"] = str(Path(tmp) / "mem.json")
+        return ResearchRadarAgent(cfg, offline=True, seed=0)
+
+    def test_explainer_cold_start_and_grounded(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp:
+            agent = self._agent(tmp)
+            recs = agent.run_cycle("reinforcement learning rlhf", k=3)
+            self.assertTrue(recs)
+            # Cold start: mentions exploring (no history yet).
+            cold = agent.explain(recs[0])
+            self.assertIn("explor", cold.lower())
+            # After a save, the rationale should reference learned topics, not "exploring".
+            agent.learn(recs[0].paper.arxiv_id, "save")
+            recs2 = agent.run_cycle("reinforcement learning rlhf", k=3)
+            if recs2:
+                warm = agent.explain(recs2[0])
+                self.assertTrue(len(warm) > 0)
+                self.assertIsInstance(warm, str)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -39,7 +39,7 @@ def build_agent(offline: bool, mock: bool) -> ResearchRadarAgent:
 
 def rec_to_dict(r) -> dict:
     return {
-        "id": r.paper.arxiv_id, "title": r.paper.title,
+        "id": r.paper.arxiv_id, "title": r.paper.title, "abstract": r.paper.abstract,
         "topics": r.top_topics(), "summary": r.features.summary,
         "link": r.paper.abs_url or f"https://arxiv.org/abs/{r.paper.arxiv_id}",
         "score": r.score, "exploit": r.exploit, "explore": r.explore,
@@ -113,14 +113,30 @@ with left:
             st.write(r["summary"])
             st.caption(f"score **{r['score']:.2f}**  =  exploit {r['exploit']:.2f}  +  "
                        f"explore {r['explore']:.2f}")
-            c1, c2, c3, c4 = st.columns([1, 1, 1, 2])
+            c1, c2, c3, c4, c5 = st.columns([1, 1, 1, 1.2, 1.4])
             if c1.button(ACTION_EMOJI["save"], key=f"save_{r['id']}", use_container_width=True):
                 rate(r["id"], "save")
             if c2.button(ACTION_EMOJI["read"], key=f"read_{r['id']}", use_container_width=True):
                 rate(r["id"], "read")
             if c3.button(ACTION_EMOJI["skip"], key=f"skip_{r['id']}", use_container_width=True):
                 rate(r["id"], "skip")
-            c4.markdown(f"[open on arXiv ↗]({r['link']})")
+            if c4.button("🤔 Why this?", key=f"why_{r['id']}", use_container_width=True):
+                from research_radar.agent import Recommendation
+                from research_radar.perception.arxiv_source import Paper
+                from research_radar.reasoning.encoder import PaperFeatures
+                # Rebuild a lightweight Recommendation for the explainer from card data.
+                paper = Paper(arxiv_id=r["id"], title=r["title"], abstract=r["abstract"])
+                feats = PaperFeatures(arxiv_id=r["id"],
+                                      topic_scores={t: 1.0 for t in r["topics"]},
+                                      summary=r["summary"], _topics=agent.topics)
+                rec = Recommendation(rank=0, paper=paper, features=feats, score=r["score"],
+                                     exploit=r["exploit"], explore=r["explore"], warnings=[])
+                with st.spinner("LLM is reasoning about this recommendation..."):
+                    st.session_state[f"why_text_{r['id']}"] = agent.explain(rec)
+            c5.markdown(f"[open on arXiv ↗]({r['link']})")
+            why_text = st.session_state.get(f"why_text_{r['id']}")
+            if why_text:
+                st.info(f"🤔 **Why this?** {why_text}")
 
 with right:
     st.subheader("What the agent has learned")
