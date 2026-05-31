@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: "Research Radar: an LLM-encoder + contextual-bandit agent for arXiv triage"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - given-names: Jiajun
+    family-names: Xia
+    email: jxia993@aucklanduni.ac.nz
+    affiliation: University of Auckland
+repository-code: "https://github.com/jxia993/research-radar"
+abstract: >-
+  Research Radar is a small intelligent software agent that triages arXiv papers.
+  A large language model encodes each paper's abstract into a structured topic
+  feature vector, and a contextual-bandit reinforcement-learning policy (LinUCB /
+  Linear Thompson Sampling) learns the user's preferences from save/skip feedback,
+  balancing exploitation against exploration. The LLM also generates natural-language
+  rationales for its recommendations. Built for COMPSCI 767 (LLM + RL).
+keywords:
+  - arxiv
+  - contextual bandit
+  - reinforcement learning
+  - large language models
+  - recommender system
+  - intelligent agent
+license: MIT
+version: 0.5.0
+date-released: "2026-05-31"
